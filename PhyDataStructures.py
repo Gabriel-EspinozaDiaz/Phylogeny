@@ -25,6 +25,7 @@ class Pairwise:
         
         self.parent_table = np.zeros((specNum,specNum),dtype=float)
         self.grouped_table = self.parent_table.copy()
+
         self.groups = np.array([])
 
     def checkSequences(sequences):
@@ -56,24 +57,19 @@ class Pairwise:
                 count += 1
         return round(math.log(1-(count/len(spec1)))*-100,2)
     
-    def constructTable(self,list):
+    def constructTable(self):
         '''
-        Multipurpose function
-        Takes a list of 
+        builds the original table
         '''
-        given = self.stripTable()
-        
-        
-        return 0
+        table = self.parent_table
+        exc = 0
+        for n in range(len(self.specList)):
+            exc += 1
+            for i in range(exc,len(self.specList)):
+                table[n][i] = self.differences(n,i)
+        return table
+
     
-    def stripTable(self,tablepref):
-        '''
-        Strips grouped_table into numbers
-        Returns an array with the dimensions and values stored
-        '''
-
-        return np.asarray[self.grouped_table.ndim[self.grouped_table]]
-
 
     def findMin(table):
         '''
