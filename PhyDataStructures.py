@@ -69,12 +69,12 @@ class Pairwise:
                 table[n][i] = self.differences(n,i)
         return table
 
-    
+    def findMin(self):
+        '''
+        Runs through the table and finds the smallest difference
+        returns the array's indices for minimum difference
+        '''
 
-    def findMin(table):
-        '''
-        
-        '''
         return 0
 
 
