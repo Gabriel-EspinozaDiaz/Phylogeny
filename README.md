@@ -7,3 +7,8 @@ The current goal now is to rearrange the program into a class-based system. The 
 1. Store all saved values with their respective cluster
 2. Store data excised from the table in some sort of tree data structure
 3. Illustrate the diagram (this most likely will be done with pyplot)
+
+Additional features (I'm just writing these as I go because I will forget them otherwise):
+1. a method that will check and merge species if their sequences just so happen to be identical (this is highly unlikely, but it's best to have this ready)
+    NOTE: It will raise a message warning the user, and put the names together on the final illustration. 
+2. Storage of species names is now done in list form instead of string with '&' nomenclature. 

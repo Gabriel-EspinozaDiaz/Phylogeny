@@ -1,5 +1,6 @@
 import numpy as np
 import math
+import re
 
 '''
 - Reads in data 
@@ -18,13 +19,12 @@ class Pairwise:
         self.specList = []
 
         for n in range(0,len(phyList),2): #Generates a dictionary with species names as keys and sequences as items
-            self.specList.append(phyList[n])
+            self.specList.append([phyList[n]])
             self.specDict.update({phyList[n]:phyList[n+1]})
 
         specNum = len(self.specDict)
         
         self.parent_table = np.zeros((specNum,specNum),dtype=float)
-        self.grouped_table = self.parent_table.copy()
 
         self.groups = np.array([])
 
@@ -67,15 +67,30 @@ class Pairwise:
             exc += 1
             for i in range(exc,len(self.specList)):
                 table[n][i] = self.differences(n,i)
-        return table
+        self.grouped_table = self.parent_table.copy()
+
+    def shrinkTable(self):
+        '''
+        
+        '''
+        return 0
+        
+    def merge(self,):
+        '''
+        Uses the parent table and index to merge 
+        '''
+
+        return 0
 
     def findMin(self):
         '''
         Runs through the table and finds the smallest difference
-        returns the array's indices for minimum difference
+        returns a list with the minimum 
+        WARNING: two species with identical sequences will break the process at this step
         '''
-
-        return 0
+        val = np.min(self.grouped_table[np.nonzero(self.grouped_table)])
+        coords = np.where(self.grouped_table == val)
+        return [val,coords]
 
 
 '''
