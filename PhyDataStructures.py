@@ -14,19 +14,20 @@ class Pairwise:
         phy_file = open(directory,'r')
         phy_string = phy_file.read()
         phyList = phy_string.split('\n')
-        
-        self.specDict = {}
-        self.specList = []
-
+    
+        self.specDict = {} #List of species with associated amino acid sequences
+        self.specList = [] #List of species
         for n in range(0,len(phyList),2): #Generates a dictionary with species names as keys and sequences as items
             self.specList.append([phyList[n]])
             self.specDict.update({phyList[n]:phyList[n+1]})
 
-        specNum = len(self.specDict)
+        specNum = len(self.specDict) #number of species
         
-        self.parent_table = np.zeros((specNum,specNum),dtype=float)
+        self.parent_table = np.zeros((specNum,specNum),dtype=float) #unchanged table with the original values for reference during merging
 
-        self.groups = np.array([])
+        self.groups = np.array([]) #Stores species as groups for sorting out clades
+
+        phy_file.close()
 
     def checkSequences(sequences):
         '''
@@ -68,31 +69,42 @@ class Pairwise:
             for i in range(exc,len(self.specList)):
                 table[n][i] = self.differences(n,i)
         self.grouped_table = self.parent_table.copy()
-
-    def shrinkTable(self):
-        '''
         
+    def merge(self,coords):
         '''
-        return 0
-        
-    def merge(self,):
+        Uses the parent table and index to average 2 species/group differences
+        Accepts 2 indices for groups on the current table
+        Returns the merged value
         '''
-        Uses the parent table and index to merge 
-        '''
-
-        return 0
+        gs1 = coords[0]
+        gs2 = coords[1]
+        dividend = np.empty(len(gs1)*len(gs2))
+        # This code looks important but idk why I wrote it lmao: for n in [i for i in range(len(self.specDict)) if n != gs1 or n != gs2]:
+        for n in self.groups[coords[0]]: 
+            for i in self.groups(coords[1]):
+                dividend[n+i]=self.differences(n,i)
+        return np.mean(dividend)
 
     def findMin(self):
         '''
         Runs through the table and finds the smallest difference
-        returns a list with the minimum 
+        Returns a list with the minimum value and coordinates for it in the array [val,coords]
         WARNING: two species with identical sequences will break the process at this step
         '''
         val = np.min(self.grouped_table[np.nonzero(self.grouped_table)])
-        coords = np.where(self.grouped_table == val)
-        return [val,coords]
+        return [val,np.where(self.grouped_table == val)]
 
+    def shrinkTable(self):
+        '''
+        Does all necessary steps for the reduction of the table by one cell:
+            Finds the minimum value in the table (findMin) (REMINDER, IDENTICAL SEQUENCES WILL BREAK THIS PROCESS)
+            Merges the intersecting groups (merge)
+            
 
+        '''
+        
+        return 0
+    
 '''
 
 '''
