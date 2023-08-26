@@ -29,7 +29,7 @@ class Pairwise:
 
         phy_file.close()
 
-    def checkSequences(sequences):
+    def check_sequences(sequences):
         '''
         Ensures that all inputs are correct
         Raises any errors present
@@ -48,7 +48,7 @@ class Pairwise:
     def differences(self,spec1,spec2):
         '''
         Takes the index of 2 species and calculates and returns the number of pairwise differences.
-        Takes into account 
+        Takes multiple hits into account using the Poisson Formula
         '''
         spec1 = self.specDict[self.specList[spec1]]
         spec2 = self.specDict[self.specList[spec2]]
@@ -58,9 +58,10 @@ class Pairwise:
                 count += 1
         return round(math.log(1-(count/len(spec1)))*-100,2)
     
-    def constructTable(self):
+    def construct_table(self):
         '''
         builds the original table
+
         '''
         table = self.parent_table
         exc = 0
@@ -85,7 +86,7 @@ class Pairwise:
                 dividend[n+i]=self.differences(n,i)
         return np.mean(dividend)
 
-    def findMin(self):
+    def find_min(self):
         '''
         Runs through the table and finds the smallest difference
         Returns a list with the minimum value and coordinates for it in the array [val,coords]
@@ -94,17 +95,27 @@ class Pairwise:
         val = np.min(self.grouped_table[np.nonzero(self.grouped_table)])
         return [val,np.where(self.grouped_table == val)]
 
-    def shrinkTable(self):
+    def shrink_table(self):
         '''
         Does all necessary steps for the reduction of the table by one cell:
-            Finds the minimum value in the table (findMin) (REMINDER, IDENTICAL SEQUENCES WILL BREAK THIS PROCESS)
+            Finds the minimum value in the table (find_min) (REMINDER, IDENTICAL SEQUENCES WILL BREAK THIS PROCESS)
             Merges the intersecting groups (merge)
             
-
         '''
+        mdata = self.find_min
+        min = mdata[0]
+
         
         return 0
     
+    def do_your_thing(self):
+        '''
+        Executes all methods needed to gather the data needed for the full phylogeny in the following order:
+        1. Builds the table (construct_table)
+        '''
+        self.construct_table()
+
+
 '''
 
 '''
