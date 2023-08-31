@@ -2,6 +2,5 @@ from PhyDataStructures import Pairwise
 
 class main():
     test1 = Pairwise('Sequences.txt')
-    print(test1.differences(0,1))
-    test1.construct_table()
-    print(test1.grouped_table)
+    print(test1.find_min())
+    print(test1.merge([1,2]))
