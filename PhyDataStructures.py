@@ -36,6 +36,8 @@ class Pairwise:
             for i in range(exc,len(self.specList)):
                 self.parent_table[n][i] = self.differences(n,i)
         self.grouped_table = self.parent_table.copy()
+        for n in range(self.specNum):
+            self.groups[n] = [self.groups[n]]
 
     def check_sequences(self):
         '''
@@ -88,29 +90,26 @@ class Pairwise:
         val = np.min(self.grouped_table[np.nonzero(self.grouped_table)])
         return [val,np.where(self.grouped_table == val)]
 
-    def collect_children(self,node):
-        children = []
-        visits = [node]
-        while len(visits) > 0:
-            children.append(node.children)
-            node = 'idk'
-        return children
-
     def merge(self,coords):
         '''
         Uses the parent table and index to average 2 species/group differences
         Accepts 2 indices for groups on the current table
         Returns the merged value
         '''
-        gs1 = coords[0]
-        gs2 = coords[1]
-        dividend = np.empty(len(gs1)*len(gs2))
-        for n in self.groups[coords[0]]: 
-            for i in self.groups(coords[1]):
-                dividend[n+i]=self.differences(n,i)
+        group_1 = self.groups[coords[0]]
+        group_2 = self.groups[coords[1]]
+        dividend = np.empty(len(group_1)*len(group_2))
+        exc = -1
+        for n in range(len(group_1)):
+            spec1 = [self.specList.index(group_1[n])]
+            exc += 1
+            for i in range(exc,len(group_2)):
+                spec2 = [self.specList.index(group_2[i])]
+                chosen = (self.parent_table[spec1,spec2])
+                dividend[n+i] = chosen
         return np.mean(dividend)
 
-    def shrink_table(self):
+    def shrink_table(self,coords):
         '''
         Does all necessary steps for the reduction of the table by one cell:
             Finds the minimum value in the table (find_min) (REMINDER, IDENTICAL SEQUENCES WILL BREAK THIS PROCESS)
